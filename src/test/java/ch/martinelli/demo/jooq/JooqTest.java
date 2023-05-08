@@ -57,17 +57,17 @@ public class JooqTest {
 
     @Test
     void updatable_record() {
-        AthleteRecord mujinga = dsl.newRecord(ATHLETE);
-        mujinga.setFirstName("Mujinga");
-        mujinga.setLastName("Kambundji");
-        mujinga.setGender("f");
-        mujinga.setYearOfBirth(1992);
-        mujinga.setClubId(1L);
-        mujinga.setOrganizationId(1L);
+        AthleteRecord athlete = dsl.newRecord(ATHLETE);
+        athlete.setFirstName("Mujinga");
+        athlete.setLastName("Kambundji");
+        athlete.setGender("f");
+        athlete.setYearOfBirth(1992);
+        athlete.setClubId(1L);
+        athlete.setOrganizationId(1L);
 
-        mujinga.store();
+        athlete.store();
 
-        assertThat(mujinga.getId()).isNotNull();
+        assertThat(athlete.getId()).isNotNull();
     }
 
     @Test
