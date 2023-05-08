@@ -57,7 +57,7 @@ public class JooqTest {
 
     @Test
     void updatable_record() {
-        AthleteRecord mujinga = new AthleteRecord();
+        AthleteRecord mujinga = dsl.newRecord(ATHLETE);
         mujinga.setFirstName("Mujinga");
         mujinga.setLastName("Kambundji");
         mujinga.setGender("f");
@@ -65,7 +65,6 @@ public class JooqTest {
         mujinga.setClubId(1L);
         mujinga.setOrganizationId(1L);
 
-        mujinga.attach(dsl.configuration());
         mujinga.store();
 
         assertThat(mujinga.getId()).isNotNull();
