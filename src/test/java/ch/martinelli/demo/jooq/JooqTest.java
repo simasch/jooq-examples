@@ -2,7 +2,7 @@ package ch.martinelli.demo.jooq;
 
 import ch.martinelli.demo.jooq.database.tables.records.AthleteRecord;
 import ch.martinelli.demo.jooq.database.tables.records.CompetitionRecord;
-import ch.martinelli.demo.jooq.model.AthleteDTO;
+import ch.martinelli.demo.jooq.projection.AthleteDTO;
 import org.jooq.DSLContext;
 import org.jooq.Result;
 import org.junit.jupiter.api.Test;
@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigInteger;
 import java.util.List;
 
 import static ch.martinelli.demo.jooq.database.tables.Athlete.ATHLETE;
