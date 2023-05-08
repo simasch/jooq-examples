@@ -1,7 +1,5 @@
 # Building data-centric applications with jOOQ
 
-https://pages.vaadin.com/webinar-jooq
-
 ## How does jOOQ work?
 
 ![jOOQ](images/jooq.png)
