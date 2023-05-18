@@ -35,24 +35,13 @@ public class JooqTest {
 
     @Test
     void insert_athlete() {
-        int execute = dsl.insertInto(ATHLETE)
+        Long id = dsl.insertInto(ATHLETE)
                 .columns(ATHLETE.FIRST_NAME, ATHLETE.LAST_NAME, ATHLETE.GENDER, ATHLETE.YEAR_OF_BIRTH, ATHLETE.CLUB_ID, ATHLETE.ORGANIZATION_ID)
                 .values("Sanya", "Richards-Ross", "f", 1985, 1L, 1L)
-                .execute();
-
-        assertThat(execute).isEqualTo(1);
-    }
-
-    @Test
-    void insert_athlete_returning_id() {
-        Long id = dsl
-                .insertInto(ATHLETE)
-                .columns(ATHLETE.FIRST_NAME, ATHLETE.LAST_NAME, ATHLETE.GENDER, ATHLETE.YEAR_OF_BIRTH, ATHLETE.CLUB_ID, ATHLETE.ORGANIZATION_ID)
-                .values("Mujinga", "Kambundji", "f", 1992, 1L, 1L)
                 .returningResult(ATHLETE.ID)
                 .fetchOneInto(Long.class);
 
-        assertThat(id).isNotNull();
+        assertThat(id).isEqualTo(1);
     }
 
     @Test
