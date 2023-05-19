@@ -4,9 +4,9 @@ CREATE TABLE athlete
 (
     id              bigint       NOT NULL DEFAULT NEXTVAL('athlete_seq') PRIMARY KEY,
 
-    first_name      varchar(255) NOT NULL,
-    last_name       varchar(255) NOT NULL,
-    gender          char(1)   NOT NULL,
+    first_name      varchar(100) NOT NULL,
+    last_name       varchar(100) NOT NULL,
+    gender          char(1)      NOT NULL,
     year_of_birth   int          NOT NULL,
 
     club_id         bigint                DEFAULT NULL,
@@ -19,8 +19,8 @@ CREATE TABLE category
 (
     id           bigint       NOT NULL DEFAULT NEXTVAL('category_seq') PRIMARY KEY,
 
-    abbreviation varchar(255) NOT NULL,
-    name         varchar(255) NOT NULL,
+    abbreviation varchar(10) NOT NULL,
+    name         varchar(50) NOT NULL,
     gender       char(1)      NOT NULL,
     year_from    int          NOT NULL,
     year_to      int          NOT NULL,
@@ -48,8 +48,8 @@ CREATE TABLE club
 (
     id              bigint       NOT NULL DEFAULT NEXTVAL('club_seq') PRIMARY KEY,
 
-    abbreviation    varchar(255) NOT NULL,
-    name            varchar(255) NOT NULL,
+    abbreviation    varchar(10) NOT NULL,
+    name            varchar(100) NOT NULL,
 
     organization_id bigint                DEFAULT NULL
 );
@@ -60,7 +60,7 @@ CREATE TABLE competition
 (
     id                        bigint       NOT NULL DEFAULT NEXTVAL('competition_seq') PRIMARY KEY,
 
-    name                      varchar(255) NOT NULL,
+    name                      varchar(50) NOT NULL,
     competition_date          date         NOT NULL,
     always_first_three_medals boolean      NOT NULL DEFAULT false,
     medal_percentage          int          NOT NULL,
@@ -75,10 +75,10 @@ CREATE TABLE event
 (
     id              bigint           NOT NULL DEFAULT NEXTVAL('event_seq') PRIMARY KEY,
 
-    abbreviation    varchar(255)              DEFAULT NULL,
-    name            varchar(255)              DEFAULT NULL,
+    abbreviation    varchar(10)              DEFAULT NULL,
+    name            varchar(50)              DEFAULT NULL,
     gender          char(1)                   DEFAULT NULL,
-    event_type      varchar(255)              DEFAULT NULL,
+    event_type      varchar(10)              DEFAULT NULL,
     a               double precision NOT NULL,
     b               double precision NOT NULL,
     c               double precision NOT NULL,
@@ -92,9 +92,9 @@ CREATE TABLE organization
 (
     id               bigint       NOT NULL DEFAULT NEXTVAL('organization_seq') PRIMARY KEY,
 
-    organization_key varchar(255) NOT NULL,
-    name             varchar(255) NOT NULL,
-    owner            varchar(255) NOT NULL
+    organization_key varchar(10) NOT NULL,
+    name             varchar(50) NOT NULL,
+    owner            varchar(50) NOT NULL
 );
 
 CREATE TABLE organization_user
@@ -110,7 +110,7 @@ CREATE TABLE result
     id             bigint       NOT NULL DEFAULT NEXTVAL('result_seq') PRIMARY KEY,
 
     position       int          NOT NULL,
-    result         varchar(255) NOT NULL,
+    result         varchar(20) NOT NULL,
     points         int          NOT NULL,
 
     athlete_id     bigint       NOT NULL,
@@ -125,7 +125,7 @@ CREATE TABLE security_group
 (
     id   bigint       NOT NULL DEFAULT NEXTVAL('security_group_seq') PRIMARY KEY,
 
-    name varchar(255) NOT NULL
+    name varchar(50) NOT NULL
 );
 
 CREATE SEQUENCE security_user_seq;
@@ -134,12 +134,12 @@ CREATE TABLE security_user
 (
     id              bigint       NOT NULL DEFAULT NEXTVAL('security_user_seq') PRIMARY KEY,
 
-    first_name      varchar(255) NOT NULL,
-    last_name       varchar(255) NOT NULL,
-    email           varchar(255) NOT NULL,
-    secret          varchar(255) NOT NULL,
+    first_name      varchar(100) NOT NULL,
+    last_name       varchar(100) NOT NULL,
+    email           varchar(50) NOT NULL,
+    secret          varchar(100) NOT NULL,
 
-    confirmation_id varchar(255),
+    confirmation_id varchar(200),
     confirmed       boolean               DEFAULT false
 );
 
@@ -149,7 +149,7 @@ CREATE TABLE series
 (
     id              bigint       NOT NULL DEFAULT NEXTVAL('series_seq') PRIMARY KEY,
 
-    name            varchar(255) NOT NULL,
+    name            varchar(50) NOT NULL,
     logo            bytea,
     hidden          boolean      NOT NULL DEFAULT false,
     locked          boolean      NOT NULL DEFAULT false,
