@@ -7,6 +7,7 @@ import org.jooq.DSLContext;
 import org.jooq.Result;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jooq.JooqTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,9 +18,8 @@ import static ch.martinelli.demo.jooq.database.tables.Club.CLUB;
 import static ch.martinelli.demo.jooq.database.tables.Competition.COMPETITION;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Transactional
-@SpringBootTest
-public class JooqTest {
+@JooqTest
+public class QueryTest {
 
     @Autowired
     private DSLContext dsl;
