@@ -28,7 +28,7 @@ class Result
 Organization --> "*" Series
 Organization --> "*" Club
 Organization --> "*" Athlete
-Organization --> "1..10" Event
+Category --> "1..10" Event
 Series --> "*" Competition
 Series --> "*" Category
 Athlete --> "1" Club
