@@ -4,12 +4,11 @@ import ch.martinelli.demo.jooq.database.tables.records.AthleteRecord;
 import ch.martinelli.demo.jooq.database.tables.records.CompetitionRecord;
 import ch.martinelli.demo.jooq.projection.AthleteDTO;
 import org.jooq.DSLContext;
+import org.jooq.Record3;
 import org.jooq.Result;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jooq.JooqTest;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -37,7 +36,7 @@ public class QueryTest {
     void insert_athlete() {
         Long id = dsl.insertInto(ATHLETE)
                 .columns(ATHLETE.FIRST_NAME, ATHLETE.LAST_NAME, ATHLETE.GENDER, ATHLETE.YEAR_OF_BIRTH, ATHLETE.CLUB_ID, ATHLETE.ORGANIZATION_ID)
-                .values("Sanya", "Richards-Ross", "f", 1985, 1L, 1L)
+                .values("Mujinga", "Kambundji", "f", 1992, 1L, 1L)
                 .returningResult(ATHLETE.ID)
                 .fetchOneInto(Long.class);
 
@@ -61,6 +60,23 @@ public class QueryTest {
 
     @Test
     void projection() {
+        Result<Record3<String, String, String>> athletes = dsl
+                .select(ATHLETE.FIRST_NAME, ATHLETE.LAST_NAME, CLUB.NAME)
+                .from(ATHLETE)
+                .join(CLUB).on(CLUB.ID.eq(ATHLETE.CLUB_ID))
+                .fetch();
+
+        assertThat(athletes).hasSize(1);
+        assertThat(athletes.get(0)).satisfies(athlete -> {
+            assertThat(athlete.get(ATHLETE.FIRST_NAME)).isEqualTo("Armand");
+            assertThat(athlete.get(ATHLETE.LAST_NAME)).isEqualTo("Duplantis");
+            assertThat(athlete.get(CLUB.NAME)).isEqualTo("Louisiana State University");
+        });
+    }
+
+
+    @Test
+    void projection_using_java_record() {
         List<AthleteDTO> athletes = dsl
                 .select(ATHLETE.FIRST_NAME, ATHLETE.LAST_NAME, CLUB.NAME)
                 .from(ATHLETE)
