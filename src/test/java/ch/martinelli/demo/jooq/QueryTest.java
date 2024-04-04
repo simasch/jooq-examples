@@ -92,6 +92,22 @@ public class QueryTest {
     }
 
     @Test
+    void projection_using_java_record_with_asterisk() {
+        List<AthleteDTO> athletes = dsl
+                .select(ATHLETE.FIRST_NAME, ATHLETE.LAST_NAME, CLUB.NAME)
+                .from(ATHLETE)
+                .join(CLUB).on(CLUB.ID.eq(ATHLETE.CLUB_ID))
+                .fetchInto(AthleteDTO.class);
+
+        assertThat(athletes).hasSize(1);
+        assertThat(athletes.get(0)).satisfies(athlete -> {
+            assertThat(athlete.firstName()).isEqualTo("Armand");
+            assertThat(athlete.lastName()).isEqualTo("Duplantis");
+            assertThat(athlete.clubName()).isEqualTo("Louisiana State University");
+        });
+    }
+
+    @Test
     void implicit_join() {
         List<AthleteDTO> athletes = dsl
                 .select(ATHLETE.FIRST_NAME, ATHLETE.LAST_NAME, ATHLETE.club().NAME)
