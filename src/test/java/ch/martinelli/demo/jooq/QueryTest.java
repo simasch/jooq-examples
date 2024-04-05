@@ -9,8 +9,10 @@ import org.jooq.Result;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jooq.JooqTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 import static ch.martinelli.demo.jooq.database.tables.Athlete.ATHLETE;
 import static ch.martinelli.demo.jooq.database.tables.Club.CLUB;
@@ -20,6 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.jooq.Records.mapping;
 import static org.jooq.impl.DSL.*;
 
+@Transactional
 @JooqTest
 public class QueryTest {
 
@@ -49,7 +52,7 @@ public class QueryTest {
     }
 
     @Test
-    void updatable_record() {
+    void updatable_record_insert() {
         AthleteRecord athlete = dsl.newRecord(ATHLETE);
         athlete.setFirstName("Mujinga");
         athlete.setLastName("Kambundji");
@@ -61,6 +64,28 @@ public class QueryTest {
         athlete.store();
 
         assertThat(athlete.getId()).isNotNull();
+    }
+
+    @Test
+    void updatable_record_update() {
+        Optional<AthleteRecord> optionalAthlete = dsl
+                .selectFrom(ATHLETE)
+                .where(ATHLETE.ID.eq(1000L))
+                .fetchOptional();
+
+        assertThat(optionalAthlete).isPresent();
+
+        AthleteRecord athlete = optionalAthlete.get();
+        athlete.setYearOfBirth(2000);
+        athlete.store();
+
+        AthleteRecord savedAthlete = dsl
+                .selectFrom(ATHLETE)
+                .where(ATHLETE.ID.eq(1000L))
+                .fetchOptional()
+                .orElseThrow();
+
+        assertThat(savedAthlete.getYearOfBirth()).isEqualTo(2000);
     }
 
     @Test
@@ -86,10 +111,11 @@ public class QueryTest {
                 .select(asterisk())
                 .from(ATHLETE)
                 .join(CLUB).on(CLUB.ID.eq(ATHLETE.CLUB_ID))
-                .fetch(record ->
-                        new AthleteDTO(record.get(ATHLETE.FIRST_NAME),
-                                record.get(ATHLETE.LAST_NAME),
-                                record.get(CLUB.NAME)));
+                .fetch(record -> new AthleteDTO(
+                        record.get(ATHLETE.FIRST_NAME),
+                        record.get(ATHLETE.LAST_NAME),
+                        record.get(CLUB.NAME))
+                );
 
         assertThat(athletes).hasSize(1);
         assertThat(athletes.getFirst()).satisfies(athlete -> {
@@ -101,7 +127,7 @@ public class QueryTest {
     }
 
     @Test
-    void projection_using_java_record() {
+    void projection_using_java_record_fetch_into() {
         List<AthleteDTO> athletes = dsl
                 .select(ATHLETE.FIRST_NAME, ATHLETE.LAST_NAME, CLUB.NAME)
                 .from(ATHLETE)
@@ -155,8 +181,7 @@ public class QueryTest {
         List<SeriesDTO> series = dsl
                 .select(SERIES.NAME,
                         multiset(dsl
-                                .select(COMPETITION.NAME,
-                                        COMPETITION.COMPETITION_DATE)
+                                .select(COMPETITION.NAME, COMPETITION.COMPETITION_DATE)
                                 .from(COMPETITION)
                                 .where(COMPETITION.SERIES_ID.eq(SERIES.ID))
                         ).convertFrom(r -> r.map(mapping(CompetitionDTO::new))))
@@ -177,5 +202,12 @@ public class QueryTest {
                 .execute();
 
         assertThat(deletedRows).isEqualTo(1);
+
+        Optional<AthleteRecord> optionalAthlete = dsl
+                .selectFrom(ATHLETE)
+                .where(ATHLETE.ID.eq(1000L))
+                .fetchOptional();
+
+        assertThat(optionalAthlete).isEmpty();
     }
 }
