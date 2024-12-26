@@ -87,7 +87,11 @@ public class QueryTest {
         assertThat(athletes)
                 .hasSize(1)
                 .first()
-                .isEqualTo(new AthleteDTO("Armand", "Duplantis", "Louisiana State University"));
+                .satisfies(athlete -> {
+                    assertThat(athlete.firstName()).isEqualTo("Armand");
+                    assertThat(athlete.lastName()).isEqualTo("Duplantis");
+                    assertThat(athlete.clubName()).isEqualTo("Louisiana State University");
+                });
     }
 
     @Test
@@ -100,7 +104,11 @@ public class QueryTest {
         assertThat(athletes)
                 .hasSize(1)
                 .first()
-                .isEqualTo(new AthleteDTO("Armand", "Duplantis", "Louisiana State University"));
+                .satisfies(athlete -> {
+                    assertThat(athlete.firstName()).isEqualTo("Armand");
+                    assertThat(athlete.lastName()).isEqualTo("Duplantis");
+                    assertThat(athlete.clubName()).isEqualTo("Louisiana State University");
+                });
     }
 
     @Test
