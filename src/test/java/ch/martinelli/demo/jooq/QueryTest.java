@@ -66,14 +66,15 @@ public class QueryTest {
                 .join(CLUB).on(CLUB.ID.eq(ATHLETE.CLUB_ID))
                 .fetch();
 
-        assertThat(athletes).hasSize(1);
-        assertThat(athletes.get(0)).satisfies(athlete -> {
-            assertThat(athlete.get(ATHLETE.FIRST_NAME)).isEqualTo("Armand");
-            assertThat(athlete.get(ATHLETE.LAST_NAME)).isEqualTo("Duplantis");
-            assertThat(athlete.get(CLUB.NAME)).isEqualTo("Louisiana State University");
-        });
+        assertThat(athletes)
+                .hasSize(1)
+                .first()
+                .satisfies(athlete -> {
+                    assertThat(athlete.get(ATHLETE.FIRST_NAME)).isEqualTo("Armand");
+                    assertThat(athlete.get(ATHLETE.LAST_NAME)).isEqualTo("Duplantis");
+                    assertThat(athlete.get(CLUB.NAME)).isEqualTo("Louisiana State University");
+                });
     }
-
 
     @Test
     void projection_using_java_record() {
@@ -83,12 +84,14 @@ public class QueryTest {
                 .join(CLUB).on(CLUB.ID.eq(ATHLETE.CLUB_ID))
                 .fetchInto(AthleteDTO.class);
 
-        assertThat(athletes).hasSize(1);
-        assertThat(athletes.get(0)).satisfies(athlete -> {
-            assertThat(athlete.firstName()).isEqualTo("Armand");
-            assertThat(athlete.lastName()).isEqualTo("Duplantis");
-            assertThat(athlete.clubName()).isEqualTo("Louisiana State University");
-        });
+        assertThat(athletes)
+                .hasSize(1)
+                .first()
+                .satisfies(athlete -> {
+                    assertThat(athlete.firstName()).isEqualTo("Armand");
+                    assertThat(athlete.lastName()).isEqualTo("Duplantis");
+                    assertThat(athlete.clubName()).isEqualTo("Louisiana State University");
+                });
     }
 
     @Test
@@ -98,12 +101,14 @@ public class QueryTest {
                 .from(ATHLETE)
                 .fetchInto(AthleteDTO.class);
 
-        assertThat(athletes).hasSize(1);
-        assertThat(athletes.get(0)).satisfies(athlete -> {
-            assertThat(athlete.firstName()).isEqualTo("Armand");
-            assertThat(athlete.lastName()).isEqualTo("Duplantis");
-            assertThat(athlete.clubName()).isEqualTo("Louisiana State University");
-        });
+        assertThat(athletes)
+                .hasSize(1)
+                .first()
+                .satisfies(athlete -> {
+                    assertThat(athlete.firstName()).isEqualTo("Armand");
+                    assertThat(athlete.lastName()).isEqualTo("Duplantis");
+                    assertThat(athlete.clubName()).isEqualTo("Louisiana State University");
+                });
     }
 
     @Test
