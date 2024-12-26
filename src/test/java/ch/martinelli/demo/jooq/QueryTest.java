@@ -102,7 +102,8 @@ public class QueryTest {
                 .satisfies(athlete -> {
                     assertThat(athlete.get(ATHLETE.FIRST_NAME)).isEqualTo("Armand");
                     assertThat(athlete.get(ATHLETE.LAST_NAME)).isEqualTo("Duplantis");
-                    assertThat(athlete.get(CLUB.NAME)).isEqualTo("Louisiana State University");
+                    assertThat(athlete.get(CLUB.NAME))
+                            .isEqualTo("Louisiana State University");
                 });
     }
 
@@ -121,7 +122,12 @@ public class QueryTest {
         assertThat(athletes)
                 .hasSize(1)
                 .first()
-                .isEqualTo(new AthleteDTO("Armand", "Duplantis", "Louisiana State University"));
+                .satisfies(athlete -> {
+                    assertThat(athlete.firstName()).isEqualTo("Armand");
+                    assertThat(athlete.lastName()).isEqualTo("Duplantis");
+                    assertThat(athlete.clubName())
+                            .isEqualTo("Louisiana State University");
+                });
     }
 
     @Test
@@ -135,7 +141,12 @@ public class QueryTest {
         assertThat(athletes)
                 .hasSize(1)
                 .first()
-                .isEqualTo(new AthleteDTO("Armand", "Duplantis", "Louisiana State University"));
+                .satisfies(athlete -> {
+                    assertThat(athlete.firstName()).isEqualTo("Armand");
+                    assertThat(athlete.lastName()).isEqualTo("Duplantis");
+                    assertThat(athlete.clubName())
+                            .isEqualTo("Louisiana State University");
+                });
     }
 
     @Test
@@ -148,7 +159,12 @@ public class QueryTest {
         assertThat(athletes)
                 .hasSize(1)
                 .first()
-                .isEqualTo(new AthleteDTO("Armand", "Duplantis", "Louisiana State University"));
+                .satisfies(athlete -> {
+                    assertThat(athlete.firstName()).isEqualTo("Armand");
+                    assertThat(athlete.lastName()).isEqualTo("Duplantis");
+                    assertThat(athlete.clubName())
+                            .isEqualTo("Louisiana State University");
+                });
     }
 
     @Test
@@ -162,7 +178,12 @@ public class QueryTest {
         assertThat(athletes)
                 .hasSize(1)
                 .first()
-                .isEqualTo(new NestedAthleteDTO("Armand", "Duplantis", new ClubDTO("Louisiana State University")));
+                .satisfies(athlete -> {
+                    assertThat(athlete.firstName()).isEqualTo("Armand");
+                    assertThat(athlete.lastName()).isEqualTo("Duplantis");
+                    assertThat(athlete.club().name())
+                            .isEqualTo("Louisiana State University");
+                });
     }
 
     @Test
