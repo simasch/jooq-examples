@@ -3,9 +3,12 @@ package ch.martinelli.demo.jooq;
 import ch.martinelli.demo.jooq.database.tables.records.AthleteRecord;
 import ch.martinelli.demo.jooq.database.tables.records.CompetitionRecord;
 import ch.martinelli.demo.jooq.projection.AthleteDTO;
+import ch.martinelli.demo.jooq.projection.AthleteWithClubDTO;
+import ch.martinelli.demo.jooq.projection.ClubDTO;
 import org.jooq.DSLContext;
 import org.jooq.Record3;
 import org.jooq.Result;
+import org.jooq.impl.DSL;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jooq.JooqTest;
@@ -16,6 +19,8 @@ import static ch.martinelli.demo.jooq.database.tables.Athlete.ATHLETE;
 import static ch.martinelli.demo.jooq.database.tables.Club.CLUB;
 import static ch.martinelli.demo.jooq.database.tables.Competition.COMPETITION;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.jooq.Records.mapping;
+import static org.jooq.impl.DSL.row;
 
 @JooqTest
 public class QueryTest {
@@ -108,6 +113,25 @@ public class QueryTest {
                     assertThat(athlete.firstName()).isEqualTo("Armand");
                     assertThat(athlete.lastName()).isEqualTo("Duplantis");
                     assertThat(athlete.clubName()).isEqualTo("Louisiana State University");
+                });
+    }
+
+
+    @Test
+    void nested() {
+        List<AthleteWithClubDTO> athletes = dsl
+                .select(ATHLETE.FIRST_NAME, ATHLETE.LAST_NAME,
+                        row(ATHLETE.club().ABBREVIATION, ATHLETE.club().NAME).mapping(ClubDTO::new))
+                .from(ATHLETE)
+                .fetch(mapping(AthleteWithClubDTO::new));
+
+        assertThat(athletes)
+                .hasSize(1)
+                .first()
+                .satisfies(athlete -> {
+                    assertThat(athlete.firstName()).isEqualTo("Armand");
+                    assertThat(athlete.lastName()).isEqualTo("Duplantis");
+                    assertThat(athlete.club().name()).isEqualTo("Louisiana State University");
                 });
     }
 
