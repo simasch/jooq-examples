@@ -8,7 +8,6 @@ import ch.martinelli.demo.jooq.projection.ClubDTO;
 import org.jooq.DSLContext;
 import org.jooq.Record3;
 import org.jooq.Result;
-import org.jooq.impl.DSL;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jooq.JooqTest;
