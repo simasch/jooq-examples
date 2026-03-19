@@ -10,7 +10,7 @@ import org.jooq.Record3;
 import org.jooq.Result;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jooq.JooqTest;
+import org.springframework.boot.jooq.test.autoconfigure.JooqTest;
 
 import java.util.List;
 
@@ -22,7 +22,7 @@ import static org.jooq.Records.mapping;
 import static org.jooq.impl.DSL.row;
 
 @JooqTest
-public class QueryTest {
+class QueryTest {
 
     @Autowired
     private DSLContext dsl;
