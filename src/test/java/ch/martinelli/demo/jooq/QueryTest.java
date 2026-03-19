@@ -15,8 +15,10 @@ import org.springframework.boot.jooq.test.autoconfigure.JooqTest;
 import java.util.List;
 
 import static ch.martinelli.demo.jooq.database.tables.Athlete.ATHLETE;
+import static ch.martinelli.demo.jooq.database.tables.CategoryAthlete.CATEGORY_ATHLETE;
 import static ch.martinelli.demo.jooq.database.tables.Club.CLUB;
 import static ch.martinelli.demo.jooq.database.tables.Competition.COMPETITION;
+import static ch.martinelli.demo.jooq.database.tables.Result.RESULT;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.jooq.Records.mapping;
 import static org.jooq.impl.DSL.row;
@@ -68,6 +70,7 @@ class QueryTest {
                 .select(ATHLETE.FIRST_NAME, ATHLETE.LAST_NAME, CLUB.NAME)
                 .from(ATHLETE)
                 .join(CLUB).on(CLUB.ID.eq(ATHLETE.CLUB_ID))
+                .where(ATHLETE.ID.eq(1000L))
                 .fetch();
 
         assertThat(athletes)
@@ -86,6 +89,7 @@ class QueryTest {
                 .select(ATHLETE.FIRST_NAME, ATHLETE.LAST_NAME, CLUB.NAME)
                 .from(ATHLETE)
                 .join(CLUB).on(CLUB.ID.eq(ATHLETE.CLUB_ID))
+                .where(ATHLETE.ID.eq(1000L))
                 .fetchInto(AthleteDTO.class);
 
         assertThat(athletes)
@@ -103,6 +107,7 @@ class QueryTest {
         List<AthleteDTO> athletes = dsl
                 .select(ATHLETE.FIRST_NAME, ATHLETE.LAST_NAME, ATHLETE.club().NAME)
                 .from(ATHLETE)
+                .where(ATHLETE.ID.eq(1000L))
                 .fetchInto(AthleteDTO.class);
 
         assertThat(athletes)
@@ -122,6 +127,7 @@ class QueryTest {
                 .select(ATHLETE.FIRST_NAME, ATHLETE.LAST_NAME,
                         row(ATHLETE.club().ABBREVIATION, ATHLETE.club().NAME).mapping(ClubDTO::new))
                 .from(ATHLETE)
+                .where(ATHLETE.ID.eq(1000L))
                 .fetch(mapping(AthleteWithClubDTO::new));
 
         assertThat(athletes)
@@ -136,6 +142,9 @@ class QueryTest {
 
     @Test
     void delete() {
+        dsl.deleteFrom(RESULT).where(RESULT.ATHLETE_ID.eq(1000L)).execute();
+        dsl.deleteFrom(CATEGORY_ATHLETE).where(CATEGORY_ATHLETE.ATHLETE_ID.eq(1000L)).execute();
+
         int deletedRows = dsl
                 .deleteFrom(ATHLETE)
                 .where(ATHLETE.ID.eq(1000L))
